@@ -1,0 +1,14 @@
+// Tempo médio de duração por operação
+requests
+| summarize RequestsCount=sum(itemCount), AverageDuration=avg(duration) by operation_Name
+| order by RequestsCount desc
+
+// Dependências com limite
+dependencies
+| limit 1000
+| project operation_Name, timestamp, data, duration
+
+// Dependências por operação e duração do tempo
+dependencies
+| where operation_Name == "GET Acoes/GetAll" and duration > 20
+| project operation_Name, timestamp, data, duration
